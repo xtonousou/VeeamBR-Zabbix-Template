@@ -15,7 +15,7 @@ When you have python3 and python3-pip installed, run the following command to in
 * Create a privileged user for the Veeam authentication (on Veeam Backup Server). Make sure to test the user first by logging into Veeam and checking the Jobs' status.
 * Link `veeam_monitor.sh` to external scripts directory like so: `ln -s /usr/lib/zabbix/externalscripts/veeam-br-zabbix-template/veeam_monitor.sh /usr/lib/zabbix/externalscripts/veeam_monitor.sh`. You may need to change the `/usr/lib/zabbix/externalscripts/` part if this is defined elsewhere.
 * Copy the file `env.sample` to another file called **exactly** `.env` inside the project's directory and change the values.
-* Give the following permissions to the scripts: `chmod u=rwx,g=r,o= collect.py credential-manager.sh veem_monitor.sh ; chown zabbix:zabbix collect.py credential-manager.sh veem_monitor.sh ; chmod 0400 .env`.
+* Give the following permissions to the scripts: `chmod u=rwx,g=r,o= collect.py credential-manager.sh veeam_monitor.sh ; chown zabbix:zabbix collect.py credential-manager.sh veeam_monitor.sh ; chmod 0400 .env`.
 * Enable the cron specified inside `crontab.txt` for **root** user.
 
 This is an example of `.env` file:
