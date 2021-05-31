@@ -1,0 +1,1 @@
+@reboot sudo -u zabbix /bin/bash /usr/lib/zabbix/externalscripts/veeam-br-zabbix-template/credential-manager.sh
