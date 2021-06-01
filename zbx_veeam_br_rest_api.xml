@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2021-06-01T07:53:27Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template VEEAM - Backup and Replication - RESTful API</template>
+            <name>Template VEEAM - Backup and Replication - RESTful API</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>VEEAM Jobs</name>
+                </application>
+                <application>
+                    <name>VEEAM Repositories</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>VEEAM job discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>veeam_monitor.sh[&quot;jobs&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>VEEAM Last Result Of &quot;{#JOB_NAME}&quot; Job</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;, &quot;last_result&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Jobs</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.last_result</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(Failed)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(Failed)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; failed</name>
+                                    <priority>HIGH</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{str(Success)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(Success)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; finished successfully</name>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{str(Warning)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(Warning)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; finished with warnings</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM Objects Count Of &quot;{#JOB_NAME}&quot; Job</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;, &quot;object_count&quot;]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Jobs</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.object_count</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM Status Of &quot;{#JOB_NAME}&quot; Job</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;, &quot;status&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Jobs</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.status</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(disabled)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(disabled)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; is disabled</name>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{str(inactive)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(inactive)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; is inactive</name>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{str(running)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{str(running)}=0</recovery_expression>
+                                    <name>VEEAM job &quot;{#JOB_NAME}&quot; is running</name>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM Type Of &quot;{#JOB_NAME}&quot; Job</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;, &quot;type&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Jobs</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.type</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM Job &quot;{#JOB_NAME}&quot; Information</name>
+                            <type>EXTERNAL</type>
+                            <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;]</key>
+                            <delay>10m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Jobs</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>VEEAM number of objects of job &quot;{#JOB_NAME}&quot;</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00FFFF</color>
+                                    <item>
+                                        <host>Template VEEAM - Backup and Replication - RESTful API</host>
+                                        <key>veeam_monitor.sh[&quot;jobs&quot;,&quot;{#JOB_NAME}&quot;, &quot;object_count&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>VEEAM repository discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>veeam_monitor.sh[&quot;repositories&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; path</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;path&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Repositories</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.path</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; free space</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_free&quot;]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Repositories</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.space_free</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; total space</name>
+                            <type>DEPENDENT</type>
+                            <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_total&quot;]</key>
+                            <delay>0</delay>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Repositories</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.space_total</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; information</name>
+                            <type>EXTERNAL</type>
+                            <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;]</key>
+                            <delay>10m</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>VEEAM Repositories</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_free&quot;].last()} * 100 / {Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_total&quot;].last()} &lt; 5</expression>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; has less than 5% of free space</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_free&quot;].last()} * 100 / {Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_total&quot;].last()} &lt; 10</expression>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; has less than 10% of free space</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_free&quot;].last()} * 100 / {Template VEEAM - Backup and Replication - RESTful API:veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_total&quot;].last()} &lt; 15</expression>
+                            <name>VEEAM repository &quot;{#REPO_NAME}&quot; has less than 15% of free space</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Free storage space of repository {#REPO_NAME}</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <item>
+                                        <host>Template VEEAM - Backup and Replication - RESTful API</host>
+                                        <key>veeam_monitor.sh[&quot;repositories&quot;,&quot;{#REPO_NAME}&quot;, &quot;space_free&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
